@@ -1,0 +1,60 @@
+# default type is "agent", possible values: ["agent", "router", "injector"]
+type: "agent"
+
+agent:
+  # use default if empty, default: ${hostname}:${pid}
+  id: 
+
+  # agent group, default group if empty
+  grp:
+
+  # agent private cert. Agent signs connect request with this cert.
+  # Server could reject client connection request if cert is invalid
+  cert: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC96EJj5GiPXeXq
+    wPtfCtWNXxlSNyF90cayz57eRE3D1DycCSeekv4fRSll73uTj1oMQesU7y7T17Tw
+    qwFaXRZhyIitM99TLte3DLayQ07IkUf/fgzTepSTDqSj7BA0wLAkbGAozjal2nTM
+    SYpeLimwIhN3plYK6Vtt3oOYzidXwvFU3C9h+mzib4rlvl+4ImAosdtmTenNvoGx
+    503AeKIOm5C1JrEUH8IwVs3TZoDUcpVa8HqA0W7aSyyDPh7vhAlTyoJEqyWws5x0
+    SMVgYyTwJcqRvCyKWV38FizWvwko5cFRD0FxYa0DD+GblhcjO5jZ8MM2U4hpkHCz
+    zZh4t/n9AgMBAAECggEBAKaqK3nXfxwzYBCChRmIPJrxlxtcXvw5GpTbOaX/c/Al
+    V3vpXOgCQRvYatiXMHD0IicXwuSAdSxd5uJAcdOIVphCkhDPsXMjbRWtBrmz8HR9
+    bB6B1WfT8IiPFVb3WdGyOeP9aPbm43bzHgYblF/LS7LUdRlQ1bqFykPGQN/eLREK
+    9QuzCnawqvDLUgXYluu4qTRTXKxof+V8nYAOwOY5Z18w2Z8r+RIYaIzyA9s2yUF/
+    9UYS9ZAQX7uTLoIv8j0DhwS6vVHhaokU4R8sUY/pGubmMsqiwYt88btIwZS/iuqP
+    qjbkorSOXHFs5SHSkqfSU47qfQTx2Rhe/Et3FuNcZgECgYEA7Twbt8Y48BeZKlpG
+    ddEGjOkCdP5iFLtkwsFSWaxF0tWbFWennXI50qfCex7TWgb9S0gt+WJG+Vlj1LaL
+    o4vj0YbTBaDSDhGxpI/3CrprOCSNCffqQDV6PxUg3eGKZZGTnZjpIPobAce+jkjK
+    8eM4aDwayQVnaH1heqgArL75n+ECgYEAzO3Kf7ge/EdGhzWW3vhKicAi+js/FMzc
+    O+a3qp3Gia2446HutH9w/SpHg5/klXOY5vyFmXGNE7nBgDCwnFbxFRmaoZkL+TgR
+    reGo+2G3AAFpmbtIvpn+DuVGC2dbs7Gxy6sfKI+yspFbccYFSlemxgCQ+GU8G5qt
+    dCgqIXbSjZ0CgYAaVaDSDqwFYuk6vViy/WgXvknqiM6EdKTjxagJkkkR9WpIvv/p
+    R2PJ0ZuSJULa7ImzkKih1VoBlf2yAC2SExZQDQJhzo9ixm4M0Xpf83+xdMU/RQj4
+    5bbTR9olJ0NAsR9M0EuYwIq88NpjWwtEPK/nSjzC8dmfzMNEZV/lzTFSoQKBgBN/
+    EAPkpXYE5e3ZKFhgMN84G1vJJTA6aT19rr2ZsxjIIU3uywH7GenMCu+314xsagCX
+    x7IYfn6A7qredv74uojyXabAI8Z7EhuD24rG+h0TBVPt4HbZubT7FRXiqHPJFQw2
+    ZIl8WljowVVqrHgtLJ2r0h7/qp9JsPTbGV8DqfZ1AoGACJEj3kz2NZC9Q4Z09Abt
+    4Fo2HjF2eFRCaZQ+HC1YMCLQy9eUnq18kVcOAog2tOy6YqbMaepdoJ5FRYDXcJsr
+    laalw9+LFp2LjeVbYuAzloVE25YcgYn0QUMot/9cKONPbM4k0U/lqkfwVTCm7JOu
+    kUz1+nOKDub069Jn3G50mIc=
+    -----END PRIVATE KEY-----
+
+# log line format, TIMESTAMP and LOG are reserved field names
+format: &f001
+  pattern: '^{TIMESTAMP} {component}: {LOG}'
+  # TIMESTAMP format layout in Go style
+  layout: 2006-01-02T15:04:05.999999999Z07:00
+
+watcher:
+  dir: logs
+  file: client.log
+  appendix: 1
+  format: *f001
+  # block, max can't exceed 2^16
+  block:
+    min: 4096
+    max: 65535
+
+# required for agent and router
+server: "ws://local.minikube.com/injector/mqtt"
