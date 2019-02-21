@@ -8,6 +8,8 @@ This is a demo project to run Time Series Log Management System locally.
 ## 1. Deploy tslog HELM chart
 --------------------------
 
+[minikube setup notes](https://github.com/rleiwang/tslog/wiki)
+
 * add helm chart repo
 ```sh
 ❯❯❯ helm repo add tslog 'https://raw.githubusercontent.com/rleiwang/helm-repo/master/'
@@ -81,7 +83,7 @@ http://local.minikube.com/server/graphql
 ```
 
 * List loggers
-```json
+```graphql
 query {
   loggers {
     id
@@ -98,7 +100,7 @@ query {
 ```
 
 * Search log content
-```json
+```graphql
 query {
   select(
     filter: {
